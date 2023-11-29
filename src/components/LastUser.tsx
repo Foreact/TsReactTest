@@ -12,7 +12,7 @@ export const LastUser = (props: PropType) => {
     <>
       { lastUser ? (
         <div>
-          <span> Last user in list:</span>
+          <span> Last user in list: </span>
           <span>{lastUser.name}</span>
         </div>
       ) : null}

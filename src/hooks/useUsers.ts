@@ -30,8 +30,15 @@ export const useUsers = () => {
       setUsers([...users, newUser])
   }, [count, users]);
 
-  useEffect(() => {
+  const myCallback = useCallback(() => {
+    for (let i = 0; i < users.length; ++i) {
+      if (users[i].city === "Paris") {
+        console.log('Paris people:', users[i])
+      }
+    }
+  }, [users]);
 
+  useEffect(() => {
     /*
       It should be deleted because numberOfMale is not used and is therefore unnecessary
     */
@@ -42,7 +49,7 @@ export const useUsers = () => {
     //   const userGender = user.gender
 
     //   if (userGender === 'male') {
-    //     numberOfMale = numberOfMale + 1
+    //     numberOfMale++;
     //   }
     // }
     // console.log('Male users count:', numberOfMale)
@@ -50,16 +57,24 @@ export const useUsers = () => {
     /*
       It's the same thing here, but because I added the 'city' when adding a new user, this feature is used.
     */
+    /*
+      The timeout here is not normally necessary in this case,
+      but if it was necessary for synchronization reasons,
+      then I would have done it like this to check the list of users living in Paris
+      Otherwise, I'll do something like this:
+        myCallback()
+    */
     //Show people living in Paris
-    for (let i = 0; i < users.length; ++i) {
-      const myCallback = () => {
-        if (users[i].city === "Paris") {
-          console.log('Paris people:', users[i])
-        }
-      }
+    if (users.length > 0) {
       window.setTimeout(myCallback, 100)
     }
-  }, [users])
+  
+  /*
+    The fact that this useEffect had no dependencies confuses me because, depending on the functionality,
+    you might want to know the number of males in the list each time you change it.
+    Personally, I think you want to know the number of males each time you change the number of users.
+  */
+  }, [myCallback, users])
 
   return {
     users,
